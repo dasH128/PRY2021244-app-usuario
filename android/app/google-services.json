@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "15224073924",
+    "project_id": "glucoapp-daa9a",
+    "storage_bucket": "glucoapp-daa9a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15224073924:android:6afdfea611205bac526391",
+        "android_client_info": {
+          "package_name": "com.dash.glucoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "15224073924-ecblt8u03vbsjjn3amll78ljkitur5vk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjxv9OEJCFR3DcCoAUzFMNRR5hAym_nnM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15224073924-ecblt8u03vbsjjn3amll78ljkitur5vk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15224073924:android:61aab88323946d02526391",
+        "android_client_info": {
+          "package_name": "com.example.glucoadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "15224073924-ecblt8u03vbsjjn3amll78ljkitur5vk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjxv9OEJCFR3DcCoAUzFMNRR5hAym_nnM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15224073924-ecblt8u03vbsjjn3amll78ljkitur5vk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

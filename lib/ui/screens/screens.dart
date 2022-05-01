@@ -1,0 +1,13 @@
+export 'package:glucoapp/ui/screens/loading/loading_screen.dart';
+export 'package:glucoapp/ui/screens/login/login_screen.dart';
+export 'package:glucoapp/ui/screens/inicio/inicio_screen.dart';
+export 'package:glucoapp/ui/screens/home_paciente/home_paciente_screen.dart';
+export 'package:glucoapp/ui/screens/home_medico/home_medico_screen.dart';
+export 'package:glucoapp/ui/screens/registro_medico/registro_medico_screen.dart';
+export 'package:glucoapp/ui/screens/registro_paciente/registro_paciente_screen.dart';
+export 'package:glucoapp/ui/screens/olvido_password/olvido_password_screen.dart';
+export 'package:glucoapp/ui/screens/registro_alimentacion/registro_alimentacion_screen.dart';
+export 'package:glucoapp/ui/screens/registro_fisico/registro_fisico_screen.dart';
+export 'package:glucoapp/ui/screens/paciente_resumen/paciente_resumen_screen.dart';
+export 'package:glucoapp/ui/screens/reporte_diario/reporte_diario_screen.dart';
+export 'package:glucoapp/ui/screens/calendario/calendario_screen.dart';

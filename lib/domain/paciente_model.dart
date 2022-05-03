@@ -3,12 +3,12 @@ import 'dart:convert';
 class PacienteModel {
   PacienteModel({
     required this.id,
-    required this.nombres,
+    required this.nombre,
     required this.apellidos,
     required this.numero,
     required this.dni,
     required this.direccion,
-    required this.medico,
+    required this.medicoId,
     required this.medicoEstado,
     required this.correo,
     final this.descripcion = '',
@@ -16,12 +16,12 @@ class PacienteModel {
   });
 
   final String id;
-  final String nombres;
+  final String nombre;
   final String apellidos;
   final String numero;
   final String dni;
   final String direccion;
-  final String medico;
+  final String medicoId;
   final String medicoEstado;
   late bool estado = true;
   final String correo;
@@ -34,12 +34,12 @@ class PacienteModel {
 
   factory PacienteModel.fromMap(Map<String, dynamic> json) => PacienteModel(
         id: json["id"] ?? '',
-        nombres: json["nombres"],
+        nombre: json["nombre"],
         apellidos: json["apellidos"],
         numero: json["numero"],
         dni: json["dni"],
         direccion: json["direccion"],
-        medico: json["medico"],
+        medicoId: json["medicoId"],
         medicoEstado: json["medicoEstado"],
         estado: json["estado"],
         correo: json["correo"],
@@ -48,12 +48,12 @@ class PacienteModel {
 
   Map<String, dynamic> toMap() => {
         "id": id,
-        "nombres": nombres,
+        "nombre": nombre,
         "apellidos": apellidos,
         "numero": numero,
         "dni": dni,
         "direccion": direccion,
-        "medico": medico,
+        "medicoId": medicoId,
         "medicoEstado": medicoEstado,
         "estado": estado,
         "correo": correo,

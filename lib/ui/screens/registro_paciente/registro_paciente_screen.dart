@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:glucoapp/domain/medico_model.dart';
 import 'package:glucoapp/ui/screens/registro_paciente/registro_paciente_controller.dart';
 import 'package:glucoapp/ui/themes/app_themes.dart';
+import 'package:glucoapp/ui/utils/display_dialog_android.dart';
 import 'package:glucoapp/ui/widgets/widgets.dart';
 
 class RegistroPacienteScreen extends StatelessWidget {
@@ -13,6 +15,7 @@ class RegistroPacienteScreen extends StatelessWidget {
     var size = MediaQuery.of(context).size;
 
     return GetBuilder<RegistroPacienteController>(builder: (controller) {
+      print('----------GetBuilder----------');
       return Scaffold(
         appBar: AppBar(title: const Text('Crear Paciente')),
         body: SafeArea(
@@ -27,7 +30,7 @@ class RegistroPacienteScreen extends StatelessWidget {
                         height: AppTheme.heightInputs,
                         child: TextFormField(
                           keyboardType: TextInputType.emailAddress,
-                          controller: controller.nombres,
+                          controller: controller.nombre,
                           decoration: const InputDecoration(
                               filled: true,
                               fillColor: Colors.white,
@@ -53,7 +56,7 @@ class RegistroPacienteScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
-                            height: AppTheme.heightInputs,
+                            // height: AppTheme.heightInputs,
                             width: size.width * 0.45,
                             child: TextFormField(
                                 controller: controller.dni,
@@ -64,7 +67,7 @@ class RegistroPacienteScreen extends StatelessWidget {
                                     hintText: 'Dni')),
                           ),
                           SizedBox(
-                            height: AppTheme.heightInputs,
+                            // height: AppTheme.heightInputs,
                             width: size.width * 0.45,
                             child: TextFormField(
                                 controller: controller.fecha,
@@ -81,7 +84,7 @@ class RegistroPacienteScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
-                            height: AppTheme.heightInputs,
+                            // height: AppTheme.heightInputs,
                             width: size.width * 0.45,
                             child: TextFormField(
                                 controller: controller.direccion,
@@ -92,7 +95,7 @@ class RegistroPacienteScreen extends StatelessWidget {
                                     hintText: 'Dirección')),
                           ),
                           SizedBox(
-                            height: AppTheme.heightInputs,
+                            // height: AppTheme.heightInputs,
                             width: size.width * 0.45,
                             child: TextFormField(
                                 controller: controller.numero,
@@ -109,7 +112,7 @@ class RegistroPacienteScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
-                            height: AppTheme.heightInputs,
+                            // height: AppTheme.heightInputs,
                             width: size.width * 0.45,
                             child: TextFormField(
                                 controller: controller.correo,
@@ -120,7 +123,7 @@ class RegistroPacienteScreen extends StatelessWidget {
                                     hintText: 'Correo')),
                           ),
                           SizedBox(
-                            height: AppTheme.heightInputs,
+                            // height: AppTheme.heightInputs,
                             width: size.width * 0.45,
                             child: TextFormField(
                                 controller: controller.numeroOpcional,
@@ -132,18 +135,9 @@ class RegistroPacienteScreen extends StatelessWidget {
                           ),
                         ],
                       ),
+                      
                       const SizedBox(height: 10),
-                      SizedBox(
-                        height: AppTheme.heightInputs,
-                        child: TextFormField(
-                          //   controller: controller.,
-                          decoration: const InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(),
-                              hintText: 'Seleccione un médico'),
-                        ),
-                      ),
+                      dropdownButtonMedicos(controller),
                       const SizedBox(height: 10),
                       SizedBox(
                         height: AppTheme.heightInputs,
@@ -173,6 +167,68 @@ class RegistroPacienteScreen extends StatelessWidget {
     });
   }
 
+  Widget dropdownButtonMedicos(RegistroPacienteController controller) {
+    print('----------dropdownButtonMedicos----------');
+    return FutureBuilder(
+        future: controller.listaMedicosDisponibles(),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<MedicoModel>> snapshot) {
+          if (snapshot.hasError) {
+            return const Center(child: Text('Something went wrong'));
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return SizedBox(
+              height: AppTheme.heightInputs,
+              child: TextFormField(
+                decoration: const InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(),
+                    hintText: 'Medico'),
+              ),
+            );
+          }
+
+          List<MedicoModel>? lista = snapshot.data;
+
+          return Container(
+            // height: AppTheme.heightInputs,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(
+                width: 1,
+                style: BorderStyle.solid,
+              ),
+            ),
+            child: DropdownButton<MedicoModel>(
+              icon: const Icon(Icons.arrow_downward),
+              isExpanded: true,
+              //   elevation: 16,
+              //   style: const TextStyle(color: Colors.deepPurple),
+              underline: Container(
+                height: 2,
+                // color: Colors.deepPurpleAccent,
+              ),
+              items: lista?.map(
+                (MedicoModel medico) {
+                  return DropdownMenuItem<MedicoModel>(
+                      value: medico,
+                      child: Container(
+                        child: Text(medico.nombre),
+                      ));
+                },
+              ).toList(),
+              value: controller.medicoSeleccionado,
+              onChanged: (value) {
+                controller.actualizarSeleccion(value!);
+              },
+            ),
+          );
+        });
+  }
+
   Widget _crearBotonRegistrar(
       BuildContext context, RegistroPacienteController controller) {
     if (controller.isLoading == true) {
@@ -180,15 +236,34 @@ class RegistroPacienteScreen extends StatelessWidget {
     } else {
       return ElevatedButton(
         onPressed: () async {
+          bool validacion = controller.validarCampos();
+          if (validacion == false) {
+            return;
+          }
+
+          bool respuesta = await controller.registrarPaciente();
           // Navigator.pushReplacementNamed(
           //     context, 'home_paciente');
           //   bool validacion = controller.validarCampos();
           //   if (validacion == false) {
           //     return;
           //   }
-
-          //   bool respuesta = await controller.registrarPaciente();
-          await controller.listaMedicosDisponibles();
+          if (respuesta == true) {
+            var s = await displayDialogAndroid(
+                context,
+                '',
+                'Se registró exitosamente su cuenta de paciente',
+                Icons.check_circle_outline);
+            print(s);
+            print('VAMOS A LOGIN');
+            Navigator.pushReplacementNamed(context, 'login');
+          } else {
+            await displayDialogAndroid(
+                context,
+                '',
+                'No se registró exitosamente su cuenta de paciente, intentelo otra vez',
+                Icons.highlight_off_outlined);
+          }
         },
         child: const Text('Continuar', style: AppTheme.textBtnStlyle),
       );

@@ -45,9 +45,11 @@ class CalendarioScreen extends StatelessWidget {
                 startingDayOfWeek: StartingDayOfWeek.monday,
                 onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
                   if (!isSameDay(controller.selectedDay, selectedDay)) {
-                    controller.selectedDay = selectedDay;
-                    controller.focusedDay = focusedDay;
-                    controller.update();
+                    // controller.selectedDay = selectedDay;
+                    // controller.focusedDay = focusedDay;
+                    // controller.update();
+                    Navigator.pushNamed(context, 'menu_reporte_dia',
+                        arguments: selectedDay);
                   }
                 },
                 onPageChanged: (focusedDay) {

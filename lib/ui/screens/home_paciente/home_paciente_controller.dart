@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class HomePacienteController extends GetxController {
   TextEditingController correo = TextEditingController();
@@ -18,7 +19,7 @@ class HomePacienteController extends GetxController {
     {
       'nombre': 'Reportes',
       'imagen': Icons.assignment,
-      'router': 'menu_reporte_diario',
+      'router': 'menu_reporte_dia',
     },
     {
       'nombre': 'Calendario',
@@ -27,4 +28,11 @@ class HomePacienteController extends GetxController {
     },
   ];
   HomePacienteController();
+
+  logout() {
+    var storage = GetStorage();
+    storage.remove('isLogued');
+    storage.remove('usuarioTipo');
+    storage.remove('idUsuario');
+  }
 }

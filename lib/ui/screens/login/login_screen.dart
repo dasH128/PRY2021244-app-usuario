@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:glucoapp/ui/screens/login/login_controller.dart';
 import 'package:glucoapp/ui/themes/app_themes.dart';
+import 'package:glucoapp/ui/utils/display_dialog_android.dart';
+import 'package:glucoapp/ui/widgets/custom_loading_button.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -45,14 +47,7 @@ class LoginScreen extends StatelessWidget {
                 SizedBox(
                   height: AppTheme.heightInputs,
                   width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      Navigator.pushReplacementNamed(context, 'home_paciente');
-                      //   await controller.login();
-                    },
-                    child:
-                        const Text('Continuar', style: AppTheme.textBtnStlyle),
-                  ),
+                  child: _crearBotonContinuar(context, controller),
                 ),
                 const SizedBox(height: 10),
                 InkWell(
@@ -70,5 +65,30 @@ class LoginScreen extends StatelessWidget {
         ),
       );
     });
+  }
+
+  Widget _crearBotonContinuar(
+      BuildContext context, LoginController controller) {
+    if (controller.isLoading == true) {
+      return const CustomLoadingButton();
+    } else {
+      return ElevatedButton(
+        onPressed: () async {
+          var isLogin200 = await controller.login();
+          if (isLogin200["login"] == true) {
+            controller.limpiarCampos();
+            if (isLogin200["tipo"] == 'paciente') {
+              Navigator.pushReplacementNamed(context, 'home_paciente');
+            } else {
+              Navigator.pushReplacementNamed(context, 'home_medico');
+            }
+          } else {
+            await displayDialogAndroid(
+                context, '', isLogin200["tipo"], Icons.highlight_off_outlined);
+          }
+        },
+        child: const Text('Continuar', style: AppTheme.textBtnStlyle),
+      );
+    }
   }
 }

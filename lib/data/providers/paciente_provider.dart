@@ -19,12 +19,16 @@ class PacienteProvider extends GetConnect {
       print(credential.user);
       return id;
     } catch (e) {
+      print('----------crearCuentaPaciente-------');
+      print(e);
       return '';
     }
   }
 
   Future<bool> registrarPaciente(PacienteModel paciente) async {
     try {
+      var pacienteMap = paciente.toMap();
+      await pacientesCollectionReference.doc(paciente.id).set(pacienteMap);
       return true;
     } catch (e) {
       return false;
@@ -38,4 +42,42 @@ class PacienteProvider extends GetConnect {
       return false;
     }
   }
+
+  Future<bool> pacienteExiste(String id) async {
+    try {
+      QuerySnapshot paciente =
+          await pacientesCollectionReference.where('id', isEqualTo: id).get();
+      if (paciente.docs.isEmpty) {
+        return false;
+      }
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<PacienteModel> buscarPacientePorId(String id) async {
+    try {
+      DocumentSnapshot<Object?> paciente =
+          await pacientesCollectionReference.doc(id).get();
+
+      var pacienteDB = paciente.data() as Map<String, dynamic>;
+      PacienteModel pacienteModel = PacienteModel.fromMap(pacienteDB);
+
+      return pacienteModel;
+    } catch (e) {
+      return PacienteModel(
+          id: '0',
+          nombre: 'nombre',
+          apellidos: 'apellidos',
+          numero: 'numero',
+          dni: 'dni',
+          direccion: 'direccion',
+          medicoId: 'medicoId',
+          medicoEstado: 'medicoEstado',
+          correo: 'correo');
+    }
+  }
+
+  
 }

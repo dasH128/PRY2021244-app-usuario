@@ -56,7 +56,7 @@ class InicioScreen extends StatelessWidget {
                                   context, 'registro_paciente');
                             },
                             child: const Text(
-                              'Registrarse',
+                              'Registrar Paciente',
                               style: AppTheme.textBtnStlyle,
                             ),
                           ),

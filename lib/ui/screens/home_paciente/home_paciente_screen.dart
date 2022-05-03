@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:glucoapp/ui/screens/home_paciente/home_paciente_controller.dart';
 import 'package:glucoapp/ui/themes/app_themes.dart';
+import 'package:glucoapp/ui/utils/display_dialog_logout.dart';
 
 class HomePacienteScreen extends StatelessWidget {
   const HomePacienteScreen({Key? key}) : super(key: key);
@@ -16,9 +17,9 @@ class HomePacienteScreen extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
-        drawer: _myDrawer(),
+        drawer: _myDrawer(context, controller),
         body: SafeArea(
-          child: Container(
+          child: SizedBox(
             // color: Colors.red,
             width: double.infinity,
             child: Padding(
@@ -94,7 +95,7 @@ class HomePacienteScreen extends StatelessWidget {
     );
   }
 
-  Widget _myDrawer() {
+  Widget _myDrawer(BuildContext context, HomePacienteController controller) {
     return Drawer(
       // Add a ListView to the drawer. This ensures the user can scroll
       // through the options in the drawer if there isn't enough vertical
@@ -107,22 +108,27 @@ class HomePacienteScreen extends StatelessWidget {
             decoration: const BoxDecoration(
               color: AppTheme.primary,
             ),
-            child: Row(
-              children: const [
-                SizedBox(
-                  width: 90,
-                  height: 90,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child:
-                        Icon(Icons.person, color: AppTheme.primary, size: 80.0),
+            child: InkWell(
+              onTap: () async {
+                Navigator.pushNamed(context, 'perfil_paciente');
+              },
+              child: Row(
+                children: const [
+                  SizedBox(
+                    width: 90,
+                    height: 90,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: Icon(Icons.person,
+                          color: AppTheme.primary, size: 80.0),
+                    ),
                   ),
-                ),
-                Text(
-                  '   Hola --------',
-                  style: AppTheme.textStlyle,
-                ),
-              ],
+                  Text(
+                    '   Hola ',
+                    style: AppTheme.textStlyle,
+                  ),
+                ],
+              ),
             ),
           ),
           ListTile(
@@ -134,6 +140,7 @@ class HomePacienteScreen extends StatelessWidget {
             onTap: () {
               // Update the state of the app.
               // ...
+              Navigator.pop(context);
             },
           ),
           ListTile(
@@ -143,8 +150,8 @@ class HomePacienteScreen extends StatelessWidget {
             ),
             title: const Text('Calendario', style: AppTheme.textStlyle),
             onTap: () {
-              // Update the state of the app.
-              // ...
+              Navigator.pop(context);
+              Navigator.pushNamed(context, 'menu_calendario');
             },
           ),
           ListTile(
@@ -154,8 +161,8 @@ class HomePacienteScreen extends StatelessWidget {
             ),
             title: const Text('Reporte', style: AppTheme.textStlyle),
             onTap: () {
-              // Update the state of the app.
-              // ...
+              Navigator.pop(context);
+              Navigator.pushNamed(context, 'menu_reporte_dia');
             },
           ),
           ListTile(
@@ -165,8 +172,8 @@ class HomePacienteScreen extends StatelessWidget {
             ),
             title: const Text('Comunicarme', style: AppTheme.textStlyle),
             onTap: () {
-              // Update the state of the app.
-              // ...
+              Navigator.pop(context);
+              Navigator.pushNamed(context, 'chat');
             },
           ),
           ListTile(
@@ -182,6 +189,7 @@ class HomePacienteScreen extends StatelessWidget {
             onTap: () {
               // Update the state of the app.
               // ...
+              Navigator.pop(context);
             },
           ),
           const Divider(),
@@ -191,9 +199,14 @@ class HomePacienteScreen extends StatelessWidget {
               color: AppTheme.primary,
             ),
             title: const Text('Salir', style: AppTheme.textStlyle),
-            onTap: () {
-              // Update the state of the app.
-              // ...
+            onTap: () async {
+              var respuesta = await displayDialogLogOut(context);
+              if (respuesta == true) {
+                //Cerrar Session
+                controller.logout();
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, 'login');
+              }
             },
           ),
         ],
@@ -206,7 +219,12 @@ class HomePacienteScreen extends StatelessWidget {
       //   color: Colors.amber,
       child: InkWell(
         onTap: () async {
-          Navigator.pushNamed(context, opcion['router']);
+          if (opcion['router'] == 'menu_reporte_dia') {
+            DateTime dia = DateTime.now();
+            Navigator.pushNamed(context, opcion['router'], arguments: dia);
+          } else {
+            Navigator.pushNamed(context, opcion['router']);
+          }
         },
         child: Card(
           clipBehavior: Clip.antiAlias,

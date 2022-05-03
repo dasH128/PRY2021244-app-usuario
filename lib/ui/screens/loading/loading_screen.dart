@@ -30,7 +30,12 @@ class LoadingScreen extends StatelessWidget {
       var isExist = storage.read<bool>('isLogued');
 
       if (isExist == true) {
-        Navigator.pushReplacementNamed(context, 'home_paciente');
+        var usuarioTipo = storage.read<String>('usuarioTipo');
+        if (usuarioTipo == 'paciente') {
+          Navigator.pushReplacementNamed(context, 'home_paciente');
+        } else {
+          Navigator.pushReplacementNamed(context, 'home_medico');
+        }
       } else {
         Navigator.pushReplacementNamed(context, 'inicio');
       }

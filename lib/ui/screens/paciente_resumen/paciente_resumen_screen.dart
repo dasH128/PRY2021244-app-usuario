@@ -35,17 +35,22 @@ class PacienteResumenScreen extends StatelessWidget {
   Widget _cardMenuPrincipal(
       BuildContext context, PacienteController controller) {
     return SizedBox(
-        width: double.infinity,
+      width: double.infinity,
       child: Card(
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         elevation: 15,
         shadowColor: AppTheme.primary.withOpacity(0.4),
         child: Column(
-            children: [
-                Text('Media Semanal', style: AppTheme.textEtiquetaTituloStlyle),
-                Text('120 ', style: AppTheme.textEtiquetaStlyle),
-            ],
+          children: const [
+            Text('Media Semanal', style: AppTheme.textEtiquetaTituloStlyle),
+            Text('120 mg/dl',
+                style: TextStyle(
+                    fontSize: 48.0,
+                    color: Colors.blueGrey,
+                    letterSpacing: 1.3,
+                    fontWeight: FontWeight.bold)),
+          ],
         ),
       ),
     );
@@ -72,7 +77,9 @@ class PacienteResumenScreen extends StatelessWidget {
               ),
             ),
             ElevatedButton(
-              onPressed: () async {},
+              onPressed: () async {
+                Navigator.pushNamed(context, 'recomendacion');
+              },
               child: const Text(
                 'Ver Aqui',
                 style: AppTheme.textBtnStlyle,

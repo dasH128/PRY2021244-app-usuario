@@ -81,7 +81,7 @@ class RegistroHistorialClinicoScreen extends StatelessWidget {
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(),
-                        hintText: 'Reseta'),
+                        hintText: 'Receta'),
                   ),
                 ),
                 const SizedBox(height: 10),

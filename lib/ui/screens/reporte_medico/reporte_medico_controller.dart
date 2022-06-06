@@ -1,13 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:glucoapp/data/providers/providers.dart';
-import 'package:glucoapp/domain/models.dart';
+import 'package:glucoapp/data/providers/medico_provider.dart';
 
-class ReporteDiaController extends GetxController {
-  final pacienteProvider = Get.find<PacienteProvider>();
+class ReporteMedicoController extends GetxController {
+  TextEditingController recomendacion = TextEditingController();
+  final medicoProvider = Get.find<MedicoProvider>();
 
-  TextEditingController comentario = TextEditingController();
   String mesEnString(int mes) {
     String mesTexto = '';
     switch (mes) {
@@ -55,11 +53,9 @@ class ReporteDiaController extends GetxController {
     return mesTexto;
   }
 
-  Future<bool> registrarComentario() async {
-    var storage = GetStorage();
-    var idUsuario = await storage.read('idUsuario');
-    var respuesta =
-        await pacienteProvider.registrarBitacora(idUsuario, comentario.text);
+  Future<bool> registrarRecomendacion(String idPaciente) async {
+    var respuesta = await medicoProvider.registrarRecomendacionAlPaciente(
+        idPaciente, recomendacion.text);
 
     if (respuesta == true) {
       Get.snackbar('Recomendación', 'Se guardo exitosamente.');
@@ -72,20 +68,7 @@ class ReporteDiaController extends GetxController {
   }
 
   limparCampos() {
-    comentario.text = '';
+    recomendacion.text = '';
     update();
-  }
-
-  Future<List<PuntoModel>> obtenerGlucosaPorDia(DateTime dateTime) async {
-    //   int dia = dia.d, int mes, int year
-    int dia = dateTime.day;
-    int mes = dateTime.month;
-    int year = dateTime.year;
-    var storage = GetStorage();
-    var idUsuario = await storage.read('idUsuario');
-    print('--- $dia $mes $year $idUsuario ---');
-    List<PuntoModel> data =
-        await pacienteProvider.obtenerGlucosaPorDia(dia, mes, year);
-    return data;
   }
 }

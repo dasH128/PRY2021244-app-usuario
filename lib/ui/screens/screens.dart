@@ -22,8 +22,10 @@ export 'package:glucoapp/ui/screens/menu_historial_clinico/menu_historial_clinic
 export 'package:glucoapp/ui/screens/menu_medico_chat/menu_medico_chat_screen.dart';
 export 'package:glucoapp/ui/screens/menu_pacientes/menu_pacientes_screen.dart';
 export 'package:glucoapp/ui/screens/menu_reportes/menu_reportes_screen.dart';
+export 'package:glucoapp/ui/screens/reporte_medico/reporte_medico_screen.dart';
 
 export 'package:glucoapp/ui/screens/historial_clinico/historial_clinico_screen.dart';
 export 'package:glucoapp/ui/screens/registro_historial_clinico/registro_historial_clinico_screen.dart';
 export 'package:glucoapp/ui/screens/recomendacion/recomendacion_screen.dart';
-
+export 'package:glucoapp/ui/screens/medico_historial/medico_historial_screen.dart';
+export 'package:glucoapp/ui/screens/medico_bitacora/medico_bitacora_screen.dart';

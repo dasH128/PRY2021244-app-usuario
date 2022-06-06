@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:glucoapp/ui/screens/home_paciente/home_paciente_controller.dart';
 import 'package:glucoapp/ui/themes/app_themes.dart';
+import 'package:glucoapp/ui/utils/display_alerta_glucosa.dart';
 import 'package:glucoapp/ui/utils/display_dialog_logout.dart';
 
 class HomePacienteScreen extends StatelessWidget {
@@ -11,11 +12,53 @@ class HomePacienteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(HomePacienteController());
     return GetBuilder<HomePacienteController>(builder: (controller) {
+      //   controller.obtenerGlucosaActual();
+
+      //   controller.glucosaStream.listen((data) {
+      //     var f = print("DataReceived2: " + data + " ");
+      //     bool primeraPantalla = Navigator.canPop(context);
+      //     if (primeraPantalla == true) {
+      //       Navigator.pop(context);
+      //     }
+      //     var dataGlucosa = int.parse(data);
+      //     if (dataGlucosa < 80) {
+      //       var df = displayAlertaGlucosa(
+      //           context, '$dataGlucosa', 'Hipoglucemia $data', Colors.purple);
+      //       print(df);
+      //     } else if (dataGlucosa < 120) {
+      //       var df = displayAlertaGlucosa(
+      //           context, '$dataGlucosa', 'Normal $data', Colors.blue);
+      //     } else if (dataGlucosa < 180) {
+      //       var df = displayAlertaGlucosa(
+      //           context, '$dataGlucosa', 'Elevado $data', Colors.yellow);
+      //     } else {
+      //       var df = displayAlertaGlucosa(
+      //           context, '$dataGlucosa', 'Hiperglucemia $data', Colors.red);
+      //     }
+      //     // var df = displayAlertaGlucosa(context, 'aas', 'glucosa $data');
+      //     // print(df);
+
+      //     // Get.snackbar('GLUCOSA', data);
+      //   }, onDone: () {
+      //     print("Task Done2");
+      //   }, onError: (error) {
+      //     print("Some Error2");
+      //   });
+
       return Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
+          actions: [
+            InkWell(
+              onTap: () {
+                displayAlertaGlucosa(
+                    context, '120', 'Hiperglucocemia ', Colors.yellow);
+              },
+              child: Icon(Icons.refresh),
+            )
+          ],
         ),
         drawer: _myDrawer(context, controller),
         body: SafeArea(
@@ -151,7 +194,7 @@ class HomePacienteScreen extends StatelessWidget {
             title: const Text('Calendario', style: AppTheme.textStlyle),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, 'menu_calendario');
+              Navigator.pushNamed(context, 'menu_calendario', arguments: '');
             },
           ),
           ListTile(
@@ -162,7 +205,8 @@ class HomePacienteScreen extends StatelessWidget {
             title: const Text('Reporte', style: AppTheme.textStlyle),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, 'menu_reporte_dia');
+              Navigator.pushNamed(context, 'menu_reporte_dia',
+                  arguments: [DateTime.now()]);
             },
           ),
           ListTile(
@@ -221,9 +265,9 @@ class HomePacienteScreen extends StatelessWidget {
         onTap: () async {
           if (opcion['router'] == 'menu_reporte_dia') {
             DateTime dia = DateTime.now();
-            Navigator.pushNamed(context, opcion['router'], arguments: dia);
+            Navigator.pushNamed(context, opcion['router'], arguments: [dia]);
           } else {
-            Navigator.pushNamed(context, opcion['router']);
+            Navigator.pushNamed(context, opcion['router'], arguments: '');
           }
         },
         child: Card(

@@ -4,23 +4,23 @@ import 'package:get/get.dart';
 class MenuRegistroFisicoController extends GetxController {
   var listaOpcionesMenu = [
     {
-      'nombre': 'Saludable',
-      'imagen': Icons.cake,
+      'nombre': 'Caminar',
+      'imagen': Icons.directions_walk,
       'tipo': '1',
     },
     {
-      'nombre': 'Regular',
-      'imagen': Icons.restaurant,
+      'nombre': 'Bicicleta',
+      'imagen': Icons.pedal_bike_sharp,
       'tipo': '2',
     },
     {
-      'nombre': 'No Recomendable',
-      'imagen': Icons.no_food,
+      'nombre': 'Correr',
+      'imagen': Icons.directions_run_rounded,
       'tipo': '3',
     },
     {
-      'nombre': 'Antojo de dulce',
-      'imagen': Icons.cookie,
+      'nombre': 'Agregar',
+      'imagen': Icons.add,
       'tipo': '4',
     },
   ];

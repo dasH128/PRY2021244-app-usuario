@@ -11,6 +11,8 @@ class CalendarioScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(CalendarioController());
 
+    String idPaciente = ModalRoute.of(context)?.settings.arguments as String;
+
     return GetBuilder<CalendarioController>(builder: (controller) {
       return Scaffold(
         appBar: AppBar(
@@ -48,8 +50,14 @@ class CalendarioScreen extends StatelessWidget {
                     // controller.selectedDay = selectedDay;
                     // controller.focusedDay = focusedDay;
                     // controller.update();
-                    Navigator.pushNamed(context, 'menu_reporte_dia',
-                        arguments: selectedDay);
+                    var usuarioTipo = controller.isPaciente();
+                    if (usuarioTipo == 'paciente') {
+                      Navigator.pushNamed(context, 'menu_reporte_dia',
+                          arguments: [selectedDay]);
+                    } else {
+                      Navigator.pushNamed(context, 'reporte_medico',
+                          arguments: [selectedDay, idPaciente]);
+                    }
                   }
                 },
                 onPageChanged: (focusedDay) {

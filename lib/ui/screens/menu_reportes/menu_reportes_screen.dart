@@ -55,7 +55,8 @@ class MenuReportesScreen extends StatelessWidget {
         child: ListTile(
           leading: Icon(Icons.person),
           onTap: () async {
-            // Navigator.pushNamed(context, 'routeName');
+            Navigator.pushNamed(context, 'menu_calendario',
+                arguments: paciente.id);
           },
           title: Text(paciente.nombre),
         ),

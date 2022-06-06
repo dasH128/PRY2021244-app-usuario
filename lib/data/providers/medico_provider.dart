@@ -6,6 +6,9 @@ class MedicoProvider extends GetConnect {
   final CollectionReference medicosCollectionReference =
       FirebaseFirestore.instance.collection('medicos');
 
+  final CollectionReference pacienteCollectionReference =
+      FirebaseFirestore.instance.collection('pacientes');
+
   Future<List<MedicoModel>> listarMedicos() async {
     try {
       List<MedicoModel> respuesta = [];
@@ -16,7 +19,6 @@ class MedicoProvider extends GetConnect {
       var listaMedicos = respuestaFirestore.docs;
 
       for (var medico in listaMedicos) {
-        print('-----------------');
         var elemento = medico.data() as Map<String, dynamic>;
         respuesta.add(MedicoModel(
           id: elemento["id"],
@@ -29,8 +31,6 @@ class MedicoProvider extends GetConnect {
           experiencia: elemento["experiencia"],
           correo: elemento["correo"],
         ));
-        print(elemento);
-        print('-----------------');
       }
 
       return respuesta;
@@ -42,11 +42,10 @@ class MedicoProvider extends GetConnect {
   Future<List<PacienteModel>> listarPacientesdelMedico(String idMedico) async {
     try {
       List<PacienteModel> respuesta = [];
-      QuerySnapshot<Object?> respuestaFirestore = await FirebaseFirestore
-          .instance
-          .collection('pacientes')
-          .where('medicoId', isEqualTo: idMedico)
-          .get();
+      QuerySnapshot<Object?> respuestaFirestore =
+          await pacienteCollectionReference
+              .where('medicoId', isEqualTo: idMedico)
+              .get();
       var listaPacientes = respuestaFirestore.docs;
 
       for (var paciente in listaPacientes) {
@@ -119,4 +118,24 @@ class MedicoProvider extends GetConnect {
     }
   }
 
+  Future<bool> registrarRecomendacionAlPaciente(
+      String idPaciente, String recomendacion) async {
+    try {
+      Map<String, dynamic> data = {
+        "recomendacion": recomendacion,
+        "time": DateTime.now().millisecondsSinceEpoch,
+        "estado": false,
+      };
+
+      await pacienteCollectionReference
+          .doc(idPaciente)
+          .collection('recomendaciones')
+          .doc('${data["time"]}')
+          .set(data);
+      //   print('idPaciente $idPaciente');
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

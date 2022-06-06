@@ -1,8 +1,10 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:glucoapp/domain/models.dart';
 import 'package:glucoapp/ui/screens/reporte_dia/reporte_dia_controller.dart';
 import 'package:glucoapp/ui/themes/app_themes.dart';
+import 'package:glucoapp/ui/widgets/custom_loading_page.dart';
 
 class ReporteDiaScreen extends StatelessWidget {
   const ReporteDiaScreen({Key? key}) : super(key: key);
@@ -10,43 +12,27 @@ class ReporteDiaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(ReporteDiaController());
-    DateTime dia = ModalRoute.of(context)?.settings.arguments as DateTime;
+    var arg = ModalRoute.of(context)?.settings.arguments as List<Object>;
+    DateTime dia = arg[0] as DateTime;
 
     return GetBuilder<ReporteDiaController>(builder: (controller) {
+      //   controller.obtenerGlucosaPorDia();
       return Scaffold(
         appBar: AppBar(title: const Text('Registro del día')),
-        body: Container(
-          padding: const EdgeInsets.all(10.0),
-          width: double.infinity,
-          child: Card(
-            clipBehavior: Clip.antiAlias,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0)),
-            elevation: 15,
-            shadowColor: AppTheme.primary.withOpacity(0.4),
-            child: Container(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                children: [
-                  Text(
-                    '${dia.day} ${controller.mesEnString(dia.month)} ',
-                    style: AppTheme.textEtiquetaTituloStlyle,
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'Gráfica de nivel de azucar del día',
-                    textAlign: TextAlign.center,
-                    style: AppTheme.textEtiquetaStlyle,
-                  ),
-                  const SizedBox(height: 10),
-                  _viewGrafica(),
-                  _viewActividad(),
-                  _viewBitacora(),
-                ],
-              ),
-            ),
-          ),
-        ),
+        body: FutureBuilder(
+            future: controller.obtenerGlucosaPorDia(dia),
+            builder: (BuildContext context,
+                AsyncSnapshot<List<PuntoModel>> snapshot) {
+              if (snapshot.hasError) {
+                return const Center(child: Text('Something went wrong'));
+              }
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CustomLoadingPage();
+              }
+              List<PuntoModel>? lista = snapshot.data;
+              return _viewGeneral(controller, lista!, dia);
+            }),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             await _mostrarDialogoAgregarComentario(context, controller);
@@ -57,7 +43,43 @@ class ReporteDiaScreen extends StatelessWidget {
     });
   }
 
-  Widget _viewGrafica() {
+  Widget _viewGeneral(
+      ReporteDiaController controller, List<PuntoModel> data, DateTime dia) {
+    print(data.length);
+    return Container(
+      padding: const EdgeInsets.all(10.0),
+      width: double.infinity,
+      child: Card(
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        elevation: 15,
+        shadowColor: AppTheme.primary.withOpacity(0.4),
+        child: Container(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              Text(
+                '${dia.day} ${controller.mesEnString(dia.month)} ',
+                style: AppTheme.textEtiquetaTituloStlyle,
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Gráfica de nivel de azucar del día',
+                textAlign: TextAlign.center,
+                style: AppTheme.textEtiquetaStlyle,
+              ),
+              const SizedBox(height: 10),
+              _viewGrafica(data),
+              _viewActividad(),
+              _viewBitacora(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _viewGrafica(List<PuntoModel> data) {
     return Container(
       child: AspectRatio(
         aspectRatio: 1.70,
@@ -71,7 +93,7 @@ class ReporteDiaScreen extends StatelessWidget {
             padding: const EdgeInsets.only(
                 right: 18.0, left: 12.0, top: 24, bottom: 12),
             child: LineChart(
-              mainData(),
+              mainData(data),
             ),
           ),
         ),
@@ -137,12 +159,16 @@ class ReporteDiaScreen extends StatelessWidget {
         });
   }
 
-  LineChartData mainData() {
+  LineChartData mainData(List<PuntoModel> data) {
     List<Color> gradientColors = [
       const Color(0xff23b6e6),
       const Color(0xff02d39a),
     ];
-
+    List<FlSpot> listLineChart = [];
+    for (var item in data) {
+      print('${item.ejeX} ${item.ejeY}');
+      listLineChart.add(FlSpot(item.ejeX.toDouble(), item.ejeY.toDouble()));
+    }
     return LineChartData(
       lineTouchData: LineTouchData(enabled: false),
       gridData: FlGridData(
@@ -171,14 +197,14 @@ class ReporteDiaScreen extends StatelessWidget {
         topTitles: AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 30,
-            interval: 1,
-            getTitlesWidget: bottomTitleWidgets,
-          ),
-        ),
+        // bottomTitles: AxisTitles(
+        //   sideTitles: SideTitles(
+        //     showTitles: true,
+        //     reservedSize: 30,
+        //     interval: 1,
+        //     getTitlesWidget: bottomTitleWidgets,
+        //   ),
+        // ),
         leftTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
@@ -192,20 +218,21 @@ class ReporteDiaScreen extends StatelessWidget {
           show: true,
           border: Border.all(color: const Color(0xff37434d), width: 1)),
       minX: 0,
-      maxX: 11,
+      maxX: 1440,
       minY: 0,
-      maxY: 6,
+      maxY: 220,
       lineBarsData: [
         LineChartBarData(
-          spots: const [
-            FlSpot(0, 3),
-            FlSpot(2.6, 2),
-            FlSpot(4.9, 5),
-            FlSpot(6.8, 3.1),
-            FlSpot(8, 4),
-            FlSpot(9.5, 3),
-            FlSpot(11, 4),
-          ],
+          //   spots: const [
+          //     FlSpot(0, 111),
+          //     FlSpot(1, 104),
+          //     FlSpot(9, 120),
+          //     // FlSpot(6.8, 3.1),
+          //     // FlSpot(8, 4),
+          //     // FlSpot(9.5, 3),
+          //     // FlSpot(11, 4),
+          //   ],
+          spots: listLineChart,
           isCurved: true,
           gradient: LinearGradient(
             colors: gradientColors,
@@ -233,7 +260,7 @@ class ReporteDiaScreen extends StatelessWidget {
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    print('bottomTitleWidgets $value');
+    print('bottomTitleWidgetssss $value');
     const style = TextStyle(
       color: Color(0xff68737d),
       fontWeight: FontWeight.bold,
@@ -266,14 +293,17 @@ class ReporteDiaScreen extends StatelessWidget {
     );
     String text;
     switch (value.toInt()) {
-      case 1:
-        text = '10K';
+      case 70:
+        text = 'Hipo';
         break;
-      case 3:
-        text = '30k';
+      case 120:
+        text = 'Nor';
         break;
-      case 5:
-        text = '50k';
+      case 180:
+        text = 'Elev';
+        break;
+      case 200:
+        text = 'Hipe';
         break;
       default:
         return Container();

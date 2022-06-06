@@ -14,7 +14,7 @@ class AppRoutes {
     
     
     // PACIENTE
-    'home_paciente': (BuildContext context) => const HomePacienteScreen(),
+    'home_paciente': (BuildContext context) => HomePacienteScreen(),
     'perfil_paciente': (BuildContext context) => const PerfilPacienteScreen(),
     'olvido_password': (BuildContext context) => const OlvidoPasswordScreen(),
     'paciente_resumen': (BuildContext context) => const PacienteResumenScreen(),
@@ -34,6 +34,7 @@ class AppRoutes {
     'perfil_medico': (BuildContext context) => const PerfilMedicoScreen(),
     'menu_pacientes': (BuildContext context) => const MenuPacientesScreen(),
     'menu_reportes': (BuildContext context) => const MenuReportesScreen(),
+    'reporte_medico': (BuildContext context) => const ReporteMedicoScreen(),
     'menu_medico_chat': (BuildContext context) => const MenuMedicoChatScreen(),
     'menu_historial_clinico': (BuildContext context) =>
         const MenuHistorialClinicoScreen(),
@@ -41,6 +42,7 @@ class AppRoutes {
         const HistorialClinicoScreen(),
     'registro_historial_clinico': (BuildContext context) =>
         const RegistroHistorialClinicoScreen(),
-
+    'medico_bitacora': (BuildContext context) => const MedicoBitacoraScreen(),
+    'medico_historial': (BuildContext context) => const MedicoHistorialScreen(),
   };
 }

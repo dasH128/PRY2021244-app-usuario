@@ -28,7 +28,11 @@ class AppRoutes {
     'menu_reporte_dia': (BuildContext context) => const ReporteDiaScreen(),
     'menu_calendario': (BuildContext context) => const CalendarioScreen(),
     'recomendacion': (BuildContext context) => const RecomendacionScreen(),
-
+    'reporte_alimento': (BuildContext context) =>
+        const ReporteActividadAlimentoScreen(),
+    'reporte_fisico': (BuildContext context) =>
+        const ReporteActividadFisicaScreen(),
+    
     // MEDICO
     'home_medico': (BuildContext context) => const HomeMedicoScreen(),
     'perfil_medico': (BuildContext context) => const PerfilMedicoScreen(),

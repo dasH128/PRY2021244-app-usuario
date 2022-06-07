@@ -29,3 +29,6 @@ export 'package:glucoapp/ui/screens/registro_historial_clinico/registro_historia
 export 'package:glucoapp/ui/screens/recomendacion/recomendacion_screen.dart';
 export 'package:glucoapp/ui/screens/medico_historial/medico_historial_screen.dart';
 export 'package:glucoapp/ui/screens/medico_bitacora/medico_bitacora_screen.dart';
+export 'package:glucoapp/ui/screens/reporte_actividad_alimento/reporte_actividad_alimento_screen.dart';
+export 'package:glucoapp/ui/screens/reporte_actividad_fisica/reporte_actividad_fisica_screen.dart';
+

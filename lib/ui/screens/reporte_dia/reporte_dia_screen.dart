@@ -31,7 +31,7 @@ class ReporteDiaScreen extends StatelessWidget {
                 return const CustomLoadingPage();
               }
               List<PuntoModel>? lista = snapshot.data;
-              return _viewGeneral(controller, lista!, dia);
+              return _viewGeneral(controller, context, lista!, dia);
             }),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
@@ -44,7 +44,8 @@ class ReporteDiaScreen extends StatelessWidget {
   }
 
   Widget _viewGeneral(
-      ReporteDiaController controller, List<PuntoModel> data, DateTime dia) {
+      ReporteDiaController controller, BuildContext context,
+      List<PuntoModel> data, DateTime dia) {
     print(data.length);
     return Container(
       padding: const EdgeInsets.all(10.0),
@@ -70,7 +71,10 @@ class ReporteDiaScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               _viewGrafica(data),
-              _viewActividad(),
+              const SizedBox(height: 10),
+              _viewActividadFisica(context, dia),
+              const SizedBox(height: 10),
+              _viewActividadAlimento(context, dia),
               _viewBitacora(),
             ],
           ),
@@ -101,8 +105,36 @@ class ReporteDiaScreen extends StatelessWidget {
     );
   }
 
-  Widget _viewActividad() {
-    return Container();
+  Widget _viewActividadFisica(BuildContext context, DateTime dia) {
+    return Container(
+      height: 60,
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.pushNamed(context, 'reporte_fisico', arguments: dia);
+        },
+        child: const Text(
+          'Reporte Activdad Física',
+          style: AppTheme.textBtnStlyle,
+        ),
+      ),
+    );
+  }
+
+  Widget _viewActividadAlimento(BuildContext context, DateTime dia) {
+    return Container(
+      height: 60,
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.pushNamed(context, 'reporte_alimento', arguments: dia);
+        },
+        child: const Text(
+          'Reporte Activdad Alimenticia',
+          style: AppTheme.textBtnStlyle,
+        ),
+      ),
+    );
   }
 
   Widget _viewBitacora() {

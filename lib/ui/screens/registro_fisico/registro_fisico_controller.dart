@@ -1,8 +1,11 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:glucoapp/data/providers/paciente_provider.dart';
 
 class RegistroFisicoController extends GetxController {
+  final pacienteProvider = Get.find<PacienteProvider>();
   late final stopwatch = Stopwatch();
   Duration cronometro = Duration();
   bool parar = false;
@@ -57,7 +60,11 @@ class RegistroFisicoController extends GetxController {
     return '${cronometro.inHours} : ${cronometro.inMinutes} : ${cronometro.inSeconds % 60} ';
   }
 
-  Future<bool> registrar() async {
-    return true;
+  Future<bool> registrar(String actividad) async {
+    var storage = GetStorage();
+    var idUsuario = await storage.read('idUsuario');
+    var res = await pacienteProvider.registarActividadFisica(
+        idUsuario, tiempoTexto(), actividad);
+    return res;
   }
 }

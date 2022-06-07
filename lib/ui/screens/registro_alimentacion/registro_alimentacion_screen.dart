@@ -10,6 +10,9 @@ class RegistroAlimentacionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(RegistroAlimentacionController());
+    var nombreActividad = ModalRoute.of(context)?.settings.arguments as String;
+    // var nombreActividad = arg[0] as String;
+    print('actividad: $nombreActividad');
 
     return GetBuilder<RegistroAlimentacionController>(builder: (controller) {
       return Scaffold(
@@ -58,7 +61,8 @@ class RegistroAlimentacionScreen extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () async {
-                      bool respuesta = await controller.registrar();
+                      bool respuesta =
+                          await controller.registrar(nombreActividad);
                       if (respuesta == true) {
                         await displayDialogAndroid(
                             context,

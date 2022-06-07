@@ -46,7 +46,8 @@ class MenuRegistroFisicoScreen extends StatelessWidget {
   Widget _cardMenu(BuildContext context, var opcion) {
     return InkWell(
       onTap: () async {
-        Navigator.pushNamed(context, 'registro_fisico');
+        Navigator.pushNamed(context, 'registro_fisico',
+            arguments: opcion["nombre"]);
       },
       child: SizedBox(
         child: Column(

@@ -11,7 +11,9 @@ class RegistroFisicoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     Get.put(RegistroFisicoController());
-
+    var nombreActividad = ModalRoute.of(context)?.settings.arguments as String;
+    // var nombreActividad = arg[0] as String;
+    print('actividad: $nombreActividad');
     return GetBuilder<RegistroFisicoController>(builder: (controller) {
       return WillPopScope(
         onWillPop: () async {
@@ -89,7 +91,8 @@ class RegistroFisicoScreen extends StatelessWidget {
                           width: size.width * 0.45,
                           child: ElevatedButton(
                             onPressed: () async {
-                              bool respuesta = await controller.registrar();
+                              bool respuesta =
+                                  await controller.registrar(nombreActividad);
 
                               if (respuesta == true) {
                                 await displayDialogAndroid(

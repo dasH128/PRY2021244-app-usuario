@@ -46,7 +46,8 @@ class MenuRegistroAlimentacionScreen extends StatelessWidget {
   Widget _cardMenu(BuildContext context, var opcion) {
     return InkWell(
       onTap: () async {
-        Navigator.pushNamed(context, 'registro_alimentacion');
+        Navigator.pushNamed(context, 'registro_alimentacion',
+            arguments: opcion["nombre"]);
       },
       child: SizedBox(
         child: Column(

@@ -181,6 +181,118 @@ class PacienteProvider extends GetConnect {
     }
   }
 
+  Future<bool> registarActividadFisica(
+      String idUsuario, String tiempo, String actividad) async {
+    try {
+      DateTime date = DateTime.now();
+      Map<String, dynamic> data = {
+        "id": date.millisecondsSinceEpoch,
+        "year": date.year,
+        "month": date.month,
+        "day": date.day,
+        "hour": '${date.hour} : ${date.minute}',
+        "valor": tiempo,
+        "actividad": actividad
+      };
+      await pacientesCollectionReference
+          .doc(idUsuario)
+          .collection('actividad_fisica')
+          .doc('${data["id"]}')
+          .set(data);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> registarActividadAlimento(
+      String idUsuario, String actividad) async {
+    try {
+      DateTime date = DateTime.now();
+      Map<String, dynamic> data = {
+        "id": date.millisecondsSinceEpoch,
+        "year": date.year,
+        "month": date.month,
+        "day": date.day,
+        "hour": '${date.hour}:${date.minute}',
+        "valor": 'tiempo',
+        "actividad": actividad
+      };
+      await pacientesCollectionReference
+          .doc(idUsuario)
+          .collection('actividad_alimento')
+          .doc('${data["id"]}')
+          .set(data);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<List<ActividadFisicaModel>> listarActividadFisica(
+      String idPaciente, DateTime date) async {
+    try {
+      List<ActividadFisicaModel> respuesta = [];
+      QuerySnapshot<Object?> respuestaFirestore =
+          await pacientesCollectionReference
+              .doc(idPaciente)
+              .collection('actividad_fisica')
+              .where('day', isEqualTo: date.day)
+              .where('month', isEqualTo: date.month)
+              .where('year', isEqualTo: date.year)
+              .get();
+      var listaActividadFisica = respuestaFirestore.docs;
+      print('listaActividadFisica');
+      print(listaActividadFisica);
+      for (var actividad in listaActividadFisica) {
+        var elemento = actividad.data() as Map<String, dynamic>;
+        respuesta.add(ActividadFisicaModel(
+            id: elemento["id"],
+            actividad: elemento["actividad"],
+            valor: elemento["valor"],
+            hour: elemento["hour"],
+            day: elemento["day"],
+            month: elemento["month"],
+            year: elemento["year"]));
+      }
+      return respuesta;
+    } catch (e) {
+      print('e $e');
+      return [];
+    }
+  }
+
+  Future<List<ActividadAlimentoModel>> listarActividadAlimento(
+      String idPaciente, DateTime date) async {
+    try {
+      List<ActividadAlimentoModel> respuesta = [];
+      QuerySnapshot<Object?> respuestaFirestore =
+          await pacientesCollectionReference
+              .doc(idPaciente)
+              .collection('actividad_alimento')
+              .where('day', isEqualTo: date.day)
+              .where('month', isEqualTo: date.month)
+              .where('year', isEqualTo: date.year)
+              .get();
+      var listaActividadAlimento = respuestaFirestore.docs;
+      print('listaActividadAlimento');
+      print(listaActividadAlimento);
+      for (var actividad in listaActividadAlimento) {
+        var elemento = actividad.data() as Map<String, dynamic>;
+        respuesta.add(ActividadAlimentoModel(
+            id: elemento["id"],
+            actividad: elemento["actividad"],
+            valor: elemento["valor"],
+            hour: elemento["hour"],
+            day: elemento["day"],
+            month: elemento["month"],
+            year: elemento["year"]));
+      }
+      return respuesta;
+    } catch (e) {
+      return [];
+    }
+  }
 //   Stream<DocumentSnapshot<Object?>> obtenerGlucosaActual(
 //       String idPaciente) async* {
 //     Stream<DocumentSnapshot<Object?>> res =

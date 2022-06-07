@@ -19,7 +19,7 @@ class MenuRegistroFisicoController extends GetxController {
       'tipo': '3',
     },
     {
-      'nombre': 'Agregar',
+      'nombre': 'Otros',
       'imagen': Icons.add,
       'tipo': '4',
     },
